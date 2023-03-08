@@ -4,14 +4,14 @@ using APITechTest.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
-builder.Services.AddScoped<IClaimTypeRepository, ClaimTypeRepository>();
-
 //Just to create some dummy data to the tables
+builder.Services.AddSingleton<DummyData>();
 DummyData DummyData = new DummyData();
 
+// Add services to the container.
+builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
+builder.Services.AddTransient<IClaimRepository, ClaimRepository>();
+builder.Services.AddTransient<IClaimTypeRepository, ClaimTypeRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

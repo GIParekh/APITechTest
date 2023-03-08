@@ -106,6 +106,16 @@ namespace APITechTest.Repositories
                         IncurredLoss =Convert.ToDecimal("200.89"),
                         Closed = false,
                     },
+                    new ClaimDataModel
+                    {
+                        UCR = "UCR 3",
+                        CompanyId =1,
+                        ClaimDate = DateTime.Now.AddDays(-5),
+                        LossDate = DateTime.Now,
+                        AssuredName ="Assured Name 3",
+                        IncurredLoss =Convert.ToDecimal("300.89"),
+                        Closed = true,
+                    },
                 };
                 context.Claims.AddRange(claims);
                 context.SaveChanges();

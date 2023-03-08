@@ -1,70 +1,82 @@
 ﻿using APITechTest.DatabaseContext;
 using APITechTest.DataModel;
-using APITechTest.Models;
+using APITechTest.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Runtime.ConstrainedExecution;
 
 namespace APITechTest.Repositories
 {
     public class CompanyRepository: ICompanyRepository
     {
-        //public CompanyRepository()
-        //{
-        //    using (var context = new MyDatabaseContext())
-        //    {
-        //        var companies = new List<CompanyDataModel>
-        //        {
-        //            new CompanyDataModel
-        //            {
-        //                Id =1,
-        //                Name ="Company 1",
-        //                Address1 ="Company 1 Address 1",
-        //                Address2 ="Company 1 Address 2",
-        //                Address3 ="Company 1 Address 3",
-        //                Postcode ="Company 1 Postcode",
-        //                Country ="Company 1 Country",
-        //                Active = true,
-        //                InsuranceEndDate = DateTime.Now.AddMonths(12), //Convert.ToDateTime("2024-03-01 00:00:00"),
-        //            },
-        //            new CompanyDataModel
-        //            {
-        //                Id =2,
-        //                Name ="Company 2",
-        //                Address1 ="Company 2 Address 1",
-        //                Address2 ="Company 2 Address 2",
-        //                Address3 ="Company 2 Address 3",
-        //                Postcode ="Company 2 Postcode",
-        //                Country = "Company 2 Country",
-        //                Active = true,
-        //                InsuranceEndDate = DateTime.Now.AddMonths(10),//Convert.ToDateTime("2025-03-01 00:00:00"),
-        //            },
-        //            new CompanyDataModel
-        //            {
-        //                Id =3,
-        //                Name ="Company 3",
-        //                Address1 ="Company 3 Address 1",
-        //                Address2 ="Company 3 Address 2",
-        //                Address3 ="Company 3 Address 3",
-        //                Postcode ="Company 3 Postcode",
-        //                Country = "Company 3 Country",
-        //                Active = true,
-        //                InsuranceEndDate = DateTime.Now.AddMonths(8), //Convert.ToDateTime("2026-03-01 00:00:00"),
-        //            },
-        //        };
-        //        context.Companies.AddRange(companies);
-        //        context.SaveChanges();
-        //    }
-        //}
-        public List<CompanyDataModel> GetCompanies()
+        public static MyDatabaseContext _myDatabaseContext { get; set; }
+        public CompanyRepository()
         {
-            using (var context = new MyDatabaseContext())
-            {
-                var list = context.Companies
-                    .ToList();
-                return list;
-            }
+            _myDatabaseContext = new MyDatabaseContext();
         }
 
+        public List<CompanyDataModel> GetCompanies()
+        {
+                var list = _myDatabaseContext.Companies
+                    .ToList();
+                return list;
+        }
 
+        public CompanyWithInsuranceStatusViewModel GetCompanyWithInsuranceStatusById(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentOutOfRangeException("Id must be a positive number greater than zero.");
+
+            var entity = _myDatabaseContext.Companies.Where(x => x.Id == id).FirstOrDefault();
+            CompanyWithInsuranceStatusViewModel result = new CompanyWithInsuranceStatusViewModel
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Address1 = entity.Address1,
+                Address2 = entity.Address2,
+                Address3 = entity.Address3,
+                Country = entity.Country,
+                Postcode = entity.Postcode,
+                InsuranceEndDate = entity.InsuranceEndDate,
+                Active = entity.Active,
+
+                IsInsurancePolicyActive = DateTime.Now <= Convert.ToDateTime(entity.InsuranceEndDate) ? true : false,
+                InsurancePolicyStatus = DateTime.Now <= entity.InsuranceEndDate ? "Active" : "Not Active",
+            };
+            return result;
+        }
+
+        public IEnumerable<ClaimDataModel> GetClaimsByCompanyId(int companyid)
+        {
+            if (companyid <= 0)
+                throw new ArgumentOutOfRangeException("Id must be a positive number greater than zero.");
+
+            IEnumerable<ClaimDataModel> result = _myDatabaseContext.Claims.Where(x => x.CompanyId == companyid).ToList();
+            
+            return result;
+        }
+
+        public IEnumerable<ClaimViewModel> GetClaimWithDaysById(string ucr)
+        {
+            if (String.IsNullOrEmpty(ucr))
+                throw new ArgumentOutOfRangeException("UCR must be a valid name.");
+
+            IEnumerable<ClaimDataModel> entity = _myDatabaseContext.Claims.Where(x => x.UCR.Equals(ucr)).ToList();
+
+            IEnumerable<ClaimViewModel> result = entity.Select(e => new ClaimViewModel
+            {
+                UCR = e.UCR,
+                CompanyId = e.CompanyId,
+                ClaimDate = e.ClaimDate,
+                LossDate = e.LossDate,
+                AssuredName = e.AssuredName,
+                IncurredLoss = e.IncurredLoss,
+                Closed = e.Closed,
+
+                ClaimDays = (DateTime.Now - Convert.ToDateTime(e.ClaimDate)).Days,
+            });
+
+            return result;
+        }
     }
 }
