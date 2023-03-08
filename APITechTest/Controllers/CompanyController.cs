@@ -18,14 +18,6 @@ namespace APITechTest.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-
-        //private readonly MyDatabaseContext _dbcontext;
-
-        //public CompanyController(MyDatabaseContext dbcontext)
-        //{
-        //    _dbcontext = dbcontext;
-        //}
-
         private readonly ICompanyRepository _companyRepository;
         public CompanyController(ICompanyRepository companyRepository)
         {
@@ -106,10 +98,6 @@ namespace APITechTest.Controllers
         [Route("UpdateClaim")]
         public IActionResult UpdateClaim(ClaimDataModel ClaimDataModel)
         {
-            //if (UCR != ClaimDataModel.UCR)
-            //{
-            //    return BadRequest();
-            //}
             bool result = _companyRepository.UpdateClaim(ClaimDataModel);
             if (result)
                 return Ok(new { message = "Claim updated" });
