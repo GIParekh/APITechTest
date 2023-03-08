@@ -10,8 +10,6 @@ DummyData DummyData = new DummyData();
 
 // Add services to the container.
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
-builder.Services.AddTransient<IClaimRepository, ClaimRepository>();
-builder.Services.AddTransient<IClaimTypeRepository, ClaimTypeRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

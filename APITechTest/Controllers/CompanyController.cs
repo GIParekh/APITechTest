@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace APITechTest.Controllers
 {
-    
+
     [ApiController]
     public class CompanyController : ControllerBase
     {
@@ -38,7 +38,7 @@ namespace APITechTest.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetCompanies")]
-        public async Task<IActionResult> GetCompanies()
+        public IActionResult GetCompanies()
         {
             return Ok(_companyRepository.GetCompanies().ToList());
         }
@@ -52,7 +52,7 @@ namespace APITechTest.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetCompanyWithInsuranceStatusById")]
-        public async Task<IActionResult> GetCompanyWithInsuranceStatusById(int Id)
+        public IActionResult GetCompanyWithInsuranceStatusById(int Id)
         {
             CompanyWithInsuranceStatusViewModel CompanyWithInsuranceStatusViewModel = _companyRepository.GetCompanyWithInsuranceStatusById(Id);
             if (CompanyWithInsuranceStatusViewModel == null)
@@ -69,7 +69,7 @@ namespace APITechTest.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetClaimsByCompanyId")]
-        public async Task<IActionResult> GetClaimsByCompanyId(int CompanyId)
+        public IActionResult GetClaimsByCompanyId(int CompanyId)
         {
             IEnumerable<ClaimDataModel> ClaimDataModel = _companyRepository.GetClaimsByCompanyId(CompanyId);
             if (ClaimDataModel == null)
@@ -87,7 +87,7 @@ namespace APITechTest.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetClaimWithDaysById")]
-        public async Task<IActionResult> GetClaimWithDaysById(string UCR)
+        public IActionResult GetClaimWithDaysById(string UCR)
         {
             IEnumerable<ClaimViewModel> ClaimViewModel = _companyRepository.GetClaimWithDaysById(UCR);
             if (ClaimViewModel == null)
@@ -95,6 +95,26 @@ namespace APITechTest.Controllers
                 return NotFound();
             }
             return Ok(ClaimViewModel);
+        }
+
+        /// <summary>
+        /// Requirement 1 - Output must be in Json format. 
+        /// Requirement 5 - We need an endpoint that will allow us to update a claim.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("UpdateClaim")]
+        public IActionResult UpdateClaim(ClaimDataModel ClaimDataModel)
+        {
+            //if (UCR != ClaimDataModel.UCR)
+            //{
+            //    return BadRequest();
+            //}
+            bool result = _companyRepository.UpdateClaim(ClaimDataModel);
+            if (result)
+                return Ok(new { message = "Claim updated" });
+            else
+                return NotFound();
         }
 
     }

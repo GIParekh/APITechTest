@@ -78,5 +78,28 @@ namespace APITechTest.Repositories
 
             return result;
         }
+
+        public bool UpdateClaim(ClaimDataModel model)
+        {
+            bool result = false;
+
+            ClaimDataModel claim = _myDatabaseContext.Claims.Find(model.UCR);
+            if (claim != null)
+            {
+                claim.CompanyId = model.CompanyId;
+                claim.ClaimDate = model.ClaimDate;
+                claim.LossDate = model.LossDate;
+                claim.AssuredName = model.AssuredName;
+                claim.Closed = model.Closed;
+                claim.IncurredLoss = model.IncurredLoss;
+
+                _myDatabaseContext.SaveChanges();
+
+                result = true;
+            }            
+            return result;
+        }
+
+
     }
 }
