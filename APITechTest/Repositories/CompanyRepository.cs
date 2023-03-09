@@ -15,13 +15,6 @@ namespace APITechTest.Repositories
             _myDatabaseContext = new MyDatabaseContext();
         }
 
-        //public List<CompanyDataModel> GetCompanies()
-        //{
-        //        var list = _myDatabaseContext.Companies
-        //            .ToList();
-        //        return list;
-        //}
-
         public CompanyWithInsuranceStatusViewModel GetCompanyWithInsuranceStatusById(int id)
         {
             if (id <= 0)

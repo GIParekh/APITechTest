@@ -5,8 +5,6 @@ namespace APITechTest.Repositories
 {
     public interface ICompanyRepository
     {
-        //public List<CompanyDataModel> GetCompanies();
-
         public CompanyWithInsuranceStatusViewModel GetCompanyWithInsuranceStatusById(int id);
         public IEnumerable<ClaimDataModel> GetClaimsByCompanyId(int companyid);
 

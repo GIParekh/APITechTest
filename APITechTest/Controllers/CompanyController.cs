@@ -24,17 +24,6 @@ namespace APITechTest.Controllers
             _companyRepository = companyRepository;
         }
 
-        ///// <summary>
-        ///// Get the list of all the companies
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet]
-        //[Route("GetCompanies")]
-        //public IActionResult GetCompanies()
-        //{
-        //    return Ok(_companyRepository.GetCompanies().ToList());
-        //}
-
         /// <summary>
         /// Requirement 1 - Output must be in Json format.
         /// Requirement 2 - We need an endpoint that will give me a single company. 
