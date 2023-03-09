@@ -1,6 +1,5 @@
 using APITechTest.DatabaseContext;
 using APITechTest.Repositories;
-;
 
 var builder = WebApplication.CreateBuilder(args);
 
