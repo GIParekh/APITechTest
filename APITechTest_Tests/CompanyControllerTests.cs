@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
 using System.ComponentModel.Design;
 using System.Reflection.Metadata;
+using System.Security.Claims;
 
 namespace APITechTest_Tests
 {

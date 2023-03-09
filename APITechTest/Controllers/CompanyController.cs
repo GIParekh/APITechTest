@@ -35,10 +35,6 @@ namespace APITechTest.Controllers
         public IActionResult GetCompanyWithInsuranceStatusById(int Id)
         {
             CompanyWithInsuranceStatusViewModel CompanyWithInsuranceStatusViewModel = _companyRepository.GetCompanyWithInsuranceStatusById(Id);
-            if (CompanyWithInsuranceStatusViewModel == null)
-            {
-                return NotFound();
-            }
             return Ok(CompanyWithInsuranceStatusViewModel);
         }
 
@@ -52,10 +48,6 @@ namespace APITechTest.Controllers
         public IActionResult GetClaimsByCompanyId(int CompanyId)
         {
             IEnumerable<ClaimDataModel> ClaimDataModel = _companyRepository.GetClaimsByCompanyId(CompanyId);
-            if (ClaimDataModel == null)
-            {
-                return NotFound();
-            }
             return Ok(ClaimDataModel);
         }
 
@@ -70,10 +62,6 @@ namespace APITechTest.Controllers
         public IActionResult GetClaimWithDaysById(string UCR)
         {
             IEnumerable<ClaimViewModel> ClaimViewModel = _companyRepository.GetClaimWithDaysById(UCR);
-            if (ClaimViewModel == null)
-            {
-                return NotFound();
-            }
             return Ok(ClaimViewModel);
         }
 
